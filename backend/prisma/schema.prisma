@@ -1,0 +1,41 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  accounts  Account[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id            Int       @id @default(autoincrement())
+  accountNumber String    @unique
+  balance       Float
+  customerId    Int
+  customer      Customer  @relation(fields: [customerId], references: [id])
+  sentTransfers     Transfer[] @relation("FromAccount")
+  receivedTransfers Transfer[] @relation("ToAccount")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Transfer {
+  id            Int      @id @default(autoincrement())
+  amount        Float
+  fromAccountId Int
+  toAccountId   Int
+  fromAccount   Account  @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount     Account  @relation("ToAccount", fields: [toAccountId], references: [id])
+  createdAt     DateTime @default(now())
+}
