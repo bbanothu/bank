@@ -40,3 +40,24 @@ export const makeDeposit = async (accountId, amount) => {
   });
   return response.json();
 };
+
+export const deleteAccount = async (accountId) => {
+  const response = await fetch(`${API_URL}/accounts/${accountId}/delete`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  return response.json();
+};
+
+export const deleteCustomer = async (customerId) => {
+  const response = await fetch(`${API_URL}/customers/${customerId}/delete`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  return response.json();
+};
+
+export const getTransactions = async () => {
+  const response = await fetch(`${API_URL}/transactions`);
+  return response.json();
+};

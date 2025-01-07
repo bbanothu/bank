@@ -1,55 +1,52 @@
-import { useState, useEffect } from 'react';
-import { getCustomers } from './api/api';
-import CreateCustomer from './components/CreateCustomer';
-import CreateAccount from './components/CreateAccount';
-import MakeTransfer from './components/MakeTransfer';
-import MakeDeposit from './components/MakeDeposit';
-import CustomerTable from './components/CustomerTable';
-import ErrorMessage from './components/ErrorMessage';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
 
 export default function App() {
-  const [customers, setCustomers] = useState([]);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
-
-  const fetchCustomers = async () => {
-    try {
-      const data = await getCustomers();
-      setCustomers(data);
-    } catch (err) {
-      setError('Failed to fetch customers');
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <ErrorMessage error={error} />
-      
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <CreateCustomer 
-          onSuccess={fetchCustomers} 
-          onError={setError} 
-        />
-        <CreateAccount 
-          customers={customers} 
-          onSuccess={fetchCustomers} 
-          onError={setError} 
-        />
-        <MakeTransfer 
-          customers={customers} 
-          onSuccess={fetchCustomers} 
-          onError={setError} 
-        />
-        <MakeDeposit 
-          customers={customers} 
-          onSuccess={fetchCustomers} 
-          onError={setError} 
-        />
-        <CustomerTable customers={customers} />
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-100">
+        <div className="w-full bg-blue-400">
+          <div className="max-w-7xl mx-auto p-6">
+            <div className="flex justify-between items-center">
+              <h1 className="text-4xl text-white">Banking App</h1>
+              <nav>
+                <ul className="flex space-x-6 text-white">
+                  <li>
+                    <Link 
+                      to="/" 
+                      className="hover:text-blue-100 transition-colors"
+                    >
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <Link 
+                      to="/transactions" 
+                      className="hover:text-blue-100 transition-colors"
+                    >
+                      Transactions
+                    </Link>
+                  </li>
+                  <li>
+                    <Link 
+                      to="/customers" 
+                      className="hover:text-blue-100 transition-colors"
+                    >
+                      Customers
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/transactions" element={<TransactionsPage />} />
+          <Route path="/customers" element={<CustomersPage />} /> */}
+        </Routes>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
